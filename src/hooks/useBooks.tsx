@@ -12,7 +12,8 @@ const supabaseToAppBook = async (book: SupabaseBook): Promise<Book> => {
     .select('categories(name)')
     .eq('book_id', book.id);
   
-  const categories = categoryData?.map(item => item.categories.name) || [];
+  // Corrigindo o acesso aos dados das categorias
+  const categories = categoryData?.map(item => item.categories?.name || '') || [];
   
   // Buscar temas relacionados
   const { data: themeData } = await supabase
@@ -20,7 +21,8 @@ const supabaseToAppBook = async (book: SupabaseBook): Promise<Book> => {
     .select('themes(name)')
     .eq('book_id', book.id);
   
-  const themes = themeData?.map(item => item.themes.name) || [];
+  // Corrigindo o acesso aos dados dos temas
+  const themes = themeData?.map(item => item.themes?.name || '') || [];
   
   // Buscar pontos-chave
   const { data: keyTakeawaysData } = await supabase
