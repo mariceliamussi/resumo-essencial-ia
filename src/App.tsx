@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import CategoryPage from "./pages/CategoryPage";
 import BookPage from "./pages/BookPage";
 import SearchPage from "./pages/SearchPage";
+import AdminPage from "./pages/AdminPage";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/categoria/:category" element={<CategoryPage />} />
           <Route path="/livro/:slug" element={<BookPage />} />
           <Route path="/pesquisa" element={<SearchPage />} />
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
