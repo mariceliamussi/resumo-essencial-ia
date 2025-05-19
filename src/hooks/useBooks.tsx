@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { Book } from '@/data/books';
 import { toast } from '@/components/ui/use-toast';
@@ -11,11 +12,13 @@ const supabaseToAppBook = async (book: SupabaseBook): Promise<Book> => {
     .select('categories(name)')
     .eq('book_id', book.id);
   
-  // Corrigindo o tipo e o acesso aos dados das categorias
+  // Extraindo corretamente os nomes das categorias
   const categories = categoryData?.map(item => {
-    // Verificando se categories existe e tem a propriedade name
-    return item.categories?.name || '';
-  }) || [];
+    // Tratando item.categories como um objeto único e não como array
+    return item.categories && typeof item.categories === 'object' 
+      ? (item.categories as any).name || '' 
+      : '';
+  }).filter(Boolean) || [];
   
   // Buscar temas relacionados
   const { data: themeData } = await supabase
@@ -23,11 +26,13 @@ const supabaseToAppBook = async (book: SupabaseBook): Promise<Book> => {
     .select('themes(name)')
     .eq('book_id', book.id);
   
-  // Corrigindo o tipo e o acesso aos dados dos temas
+  // Extraindo corretamente os nomes dos temas
   const themes = themeData?.map(item => {
-    // Verificando se themes existe e tem a propriedade name
-    return item.themes?.name || '';
-  }) || [];
+    // Tratando item.themes como um objeto único e não como array
+    return item.themes && typeof item.themes === 'object' 
+      ? (item.themes as any).name || '' 
+      : '';
+  }).filter(Boolean) || [];
   
   // Buscar pontos-chave
   const { data: keyTakeawaysData } = await supabase
