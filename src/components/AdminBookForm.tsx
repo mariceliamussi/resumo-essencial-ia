@@ -48,15 +48,35 @@ type BookFormValues = z.infer<typeof bookFormSchema>;
 
 interface AdminBookFormProps {
   onSubmit: (data: Book) => void;
+  initialData?: Book | null;
+  isEditing?: boolean;
+  onCancel?: () => void;
 }
 
-const AdminBookForm: React.FC<AdminBookFormProps> = ({ onSubmit }) => {
+const AdminBookForm: React.FC<AdminBookFormProps> = ({ 
+  onSubmit, 
+  initialData = null, 
+  isEditing = false,
+  onCancel
+}) => {
   const [themeInput, setThemeInput] = React.useState('');
   const [keyTakeawayInput, setKeyTakeawayInput] = React.useState('');
   
   const form = useForm<BookFormValues>({
     resolver: zodResolver(bookFormSchema),
-    defaultValues: {
+    defaultValues: initialData ? {
+      title: initialData.title,
+      author: initialData.author,
+      year: initialData.year,
+      categories: initialData.categories,
+      themes: initialData.themes,
+      summary: initialData.summary,
+      keyTakeaways: initialData.keyTakeaways,
+      forWhom: initialData.forWhom,
+      quote: initialData.quote,
+      coverImage: initialData.coverImage,
+      slug: initialData.slug,
+    } : {
       title: '',
       author: '',
       year: new Date().getFullYear(),
@@ -103,7 +123,7 @@ const AdminBookForm: React.FC<AdminBookFormProps> = ({ onSubmit }) => {
 
   const handleFormSubmit = (data: BookFormValues) => {
     const bookData: Book = {
-      id: String(Date.now()),
+      id: initialData?.id || String(Date.now()),
       title: data.title,
       author: data.author,
       year: data.year,
@@ -117,7 +137,9 @@ const AdminBookForm: React.FC<AdminBookFormProps> = ({ onSubmit }) => {
       slug: data.slug,
     };
     onSubmit(bookData);
-    form.reset();
+    if (!isEditing) {
+      form.reset();
+    }
   };
 
   return (
@@ -420,7 +442,16 @@ const AdminBookForm: React.FC<AdminBookFormProps> = ({ onSubmit }) => {
           )}
         />
 
-        <Button type="submit" className="w-full">Adicionar Livro</Button>
+        <div className="flex gap-3 justify-end">
+          {isEditing && onCancel && (
+            <Button type="button" variant="outline" onClick={onCancel}>
+              Cancelar
+            </Button>
+          )}
+          <Button type="submit">
+            {isEditing ? "Salvar Alterações" : "Adicionar Livro"}
+          </Button>
+        </div>
       </form>
     </Form>
   );
