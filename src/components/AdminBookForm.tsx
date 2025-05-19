@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -104,8 +103,18 @@ const AdminBookForm: React.FC<AdminBookFormProps> = ({ onSubmit }) => {
 
   const handleFormSubmit = (data: BookFormValues) => {
     const bookData: Book = {
-      ...data,
-      id: String(Date.now()), // ID temporário que será substituído pelo hook useBooks
+      id: String(Date.now()),
+      title: data.title,
+      author: data.author,
+      year: data.year,
+      categories: data.categories,
+      themes: data.themes,
+      summary: data.summary,
+      keyTakeaways: data.keyTakeaways,
+      forWhom: data.forWhom,
+      quote: data.quote,
+      coverImage: data.coverImage,
+      slug: data.slug,
     };
     onSubmit(bookData);
     form.reset();
