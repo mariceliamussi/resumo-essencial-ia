@@ -52,8 +52,8 @@ export type Database = {
         Row: {
           book_id: string;
           category_id: string;
-          categories: {
-            name: string;
+          categories?: {
+            name?: string;
           };
         };
       };
@@ -61,8 +61,8 @@ export type Database = {
         Row: {
           book_id: string;
           theme_id: string;
-          themes: {
-            name: string;
+          themes?: {
+            name?: string;
           };
         };
       };

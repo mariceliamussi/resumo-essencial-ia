@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { Book } from '@/data/books';
 import { toast } from '@/components/ui/use-toast';
@@ -12,8 +11,11 @@ const supabaseToAppBook = async (book: SupabaseBook): Promise<Book> => {
     .select('categories(name)')
     .eq('book_id', book.id);
   
-  // Corrigindo o acesso aos dados das categorias
-  const categories = categoryData?.map(item => item.categories?.name || '') || [];
+  // Corrigindo o tipo e o acesso aos dados das categorias
+  const categories = categoryData?.map(item => {
+    // Verificando se categories existe e tem a propriedade name
+    return item.categories?.name || '';
+  }) || [];
   
   // Buscar temas relacionados
   const { data: themeData } = await supabase
@@ -21,8 +23,11 @@ const supabaseToAppBook = async (book: SupabaseBook): Promise<Book> => {
     .select('themes(name)')
     .eq('book_id', book.id);
   
-  // Corrigindo o acesso aos dados dos temas
-  const themes = themeData?.map(item => item.themes?.name || '') || [];
+  // Corrigindo o tipo e o acesso aos dados dos temas
+  const themes = themeData?.map(item => {
+    // Verificando se themes existe e tem a propriedade name
+    return item.themes?.name || '';
+  }) || [];
   
   // Buscar pontos-chave
   const { data: keyTakeawaysData } = await supabase
